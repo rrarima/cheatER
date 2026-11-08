@@ -98,7 +98,7 @@ int main_thread() {
     } while (fd <= 0);
     sceIoRead(fd, game_id, 10);
     sceIoClose(fd);
-    memcpy(&game_dir[22], game_id, 10);
+    memcpy(&game_dir[23], game_id, 10);
 
     //Load the cheats
     cheat_load();

@@ -30,7 +30,14 @@ void menu_draw_cheats_tab(void) {
             continue;
         }
 
-        pspDebugScreenPuts("  ");
+        //State tag, so on/always-on doesn't rely on colour alone (always 11 characters wide)
+        if (cheat[counter].flags & FLAG_SELECTED) {
+            pspDebugScreenPuts("  [ON]     ");
+        } else if (cheat[counter].flags & FLAG_CONSTANT) {
+            pspDebugScreenPuts("  [ALWAYS] ");
+        } else {
+            pspDebugScreenPuts("           ");
+        }
         if (cheat_selected == counter) {
             //Highlight the selection
             if (cheat[cheat_selected].flags & FLAG_SELECTED) {
@@ -58,9 +65,9 @@ void menu_draw_cheats_tab(void) {
     //Helper
     pspDebugScreenSetTextColor(0xFFFF8000);
     pspDebugScreenSetXY(0, 31);
-    pspDebugScreenPuts(">< = Select Cheat for On/Off mode;");
+    pspDebugScreenPuts(">< = Toggle On/Off; [] = Always On; /\\ = Edit Cheat");
     pspDebugScreenSetXY(0, 32);
-    pspDebugScreenPuts("[] = Select Cheat for Always On mode; /\\ = Edit Cheat;");
+    pspDebugScreenPuts("[ON] = Turns on with the Music button  [ALWAYS] = Stays on");
     pspDebugScreenSetXY(0, 33);
     pspDebugScreenPuts("() = Cancel/Return to Game");
 }
