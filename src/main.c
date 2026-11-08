@@ -37,32 +37,6 @@ int module_start(SceSize args, void *argp) __attribute__((alias("_start")));
 
 int module_stop(SceSize args, void *argp) __attribute__((alias("_stop")));
 
-void restart_plugin(const char *plugin_path) {
-    SceUID modid;
-    const char* plugin_name = "cheatER";
-    modid = (SceUID) sceKernelFindModuleByName(plugin_name);
-
-    int stop_result = sceKernelStopModule(modid, 0, NULL, NULL, NULL);
-    if (stop_result < 0) {
-        snprintf(buffer, sizeof(buffer), "sceKernelStopModule failed: 0x%08X\n", stop_result);
-    }
-
-    int unload_result = sceKernelUnloadModule(modid);
-    if (unload_result < 0) {
-        snprintf(buffer, sizeof(buffer), "sceKernelUnloadModule failed: 0x%08X\n", unload_result);
-    }
-
-    modid = sceKernelLoadModule(plugin_path, 0, NULL);
-    if (modid < 0) {
-        snprintf(buffer, sizeof(buffer), "sceKernelLoadModule failed: 0x%08X\n", modid);
-    }
-
-    int start_result = sceKernelStartModule(modid, 0, NULL, NULL, NULL);
-    if (start_result < 0) {
-        snprintf(buffer, sizeof(buffer), "sceKernelStartModule failed: 0x%08X\n", start_result);
-    }
-}
-
 // Sleep up to `us`, but wake early when the menu or a screenshot is requested
 static void main_loop_wait(unsigned int us) {
     while (us > 0 && !menu_drawn && !screen_time) {

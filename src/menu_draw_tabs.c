@@ -436,7 +436,7 @@ void menu_draw_settings_tab(void) {
                 break;
 
             case 11:
-                pspDebugScreenPuts("  Restart Plugin\n");
+                pspDebugScreenPuts("  Reload cheats\n");
                 break;
         }
         counter++;
@@ -484,7 +484,7 @@ void menu_draw_settings_tab(void) {
             break;
 
         case 11:
-            pspDebugScreenPuts("Restart the Plugin");
+            pspDebugScreenPuts("Reload the cheat file (turns cheats OFF first)");
             break;
     }
     LINE_CLEAR(33);

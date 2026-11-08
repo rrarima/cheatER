@@ -10,6 +10,4 @@
 extern unsigned char running;
 extern SceUID thid; // cheatER's own thread
 
-void restart_plugin(const char *plugin_path);
-
 #endif // CHEATER_PLUGIN_H

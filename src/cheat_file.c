@@ -306,3 +306,22 @@ void cheat_save() {
         sceIoClose(fd);
     }
 }
+
+void cheat_reload(void) {
+    unsigned int counter = 0;
+    if (cheat_saved) {
+        while (counter < cheat_total) {
+            cheat_disable(counter);
+            counter++;
+        }
+    }
+
+    cheat_status = 0;
+    cheat_flash = 0;
+    cheat_dma = 0;
+    cheat_saved = 0;
+    cheat_total = 0;
+    block_total = 0;
+
+    cheat_load();
+}

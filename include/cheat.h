@@ -74,5 +74,6 @@ void cheat_toggle(unsigned int cheat_index, unsigned char enable);
 void cheat_enable(unsigned int cheat_index);
 void cheat_disable(unsigned int cheat_index);
 void cheat_apply(unsigned char type);//0=Enable/Disable FLAG_FRESH, -1=Enable only all (Freeze on all)
+void cheat_reload(void);
 
 #endif // CHEATER_CHEAT_H

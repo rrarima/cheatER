@@ -790,7 +790,8 @@ void menu_input_settings_tab(void) {
             sceUsbGetState() & PSP_USB_ACTIVATED ? stop_usb() : start_usb();
             menu_draw();
         } else if (cheat_selected == 11) {
-            restart_plugin("ms0:/cheatER.prx");
+            cheat_reload();
+            cheat_selected = 0;
             menu_draw();
         }
         menu_key_delay(150000);
