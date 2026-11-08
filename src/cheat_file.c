@@ -12,6 +12,8 @@
 unsigned char game_dir[] = "ms0:/seplugins/cheatER/__________.txt";
 unsigned char game_id[11]; // 10-character ID + end-of-string zero
 
+#define LOAD_YIELD_BYTES 256
+
 void cheat_load(void) {
     signed int fd;
 
@@ -22,10 +24,13 @@ void cheat_load(void) {
         unsigned int file_offset = 0;
         unsigned char comment_mode = 0;
         unsigned char name_mode = 0;
+        unsigned int bytes_since_yield = 0;
 
         while (file_offset < file_size) {
-            sceKernelDelayThread(1500);
-
+            if (++bytes_since_yield >= LOAD_YIELD_BYTES) {
+                bytes_since_yield = 0;
+                sceKernelDelayThread(1500);
+            }
             sceIoRead(fd, &buffer[0], 1);
 
             if ((buffer[0] == '\r') || (buffer[0] == '\n')) {
