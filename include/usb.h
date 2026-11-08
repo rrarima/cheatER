@@ -6,7 +6,7 @@
  */
 
 int load_start_module(char *path);
-void start_usb(void);
+int start_usb(void);
 void stop_usb(void);
 
 #endif // CHEATER_USB_H

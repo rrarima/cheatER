@@ -787,8 +787,20 @@ void menu_input_settings_tab(void) {
             menu_draw();
             menu_key_delay(150000);//Delay twice
         } else if (cheat_selected == 10) {
-            sceUsbGetState() & PSP_USB_ACTIVATED ? stop_usb() : start_usb();
-            menu_draw();
+            if (sceUsbGetState() & PSP_USB_ACTIVATED) {
+                stop_usb();
+                menu_draw();
+            } else {
+                int usb_failed_step = start_usb();
+                menu_draw();
+                if (usb_failed_step != 0) {
+                    char usb_msg[48];
+                    snprintf(usb_msg, sizeof(usb_msg), "USB start failed at step %d", usb_failed_step);
+                    pspDebugScreenSetXY(0, 33);
+                    pspDebugScreenPuts(usb_msg);
+                    menu_key_delay(2000000);
+                }
+            }
         } else if (cheat_selected == 11) {
             cheat_reload();
             cheat_selected = 0;

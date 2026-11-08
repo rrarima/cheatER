@@ -15,26 +15,35 @@ int load_start_module(char *path) {
     load_result = sceKernelLoadModule(path, 0, NULL);
     if (load_result & 0x80000000)
         return -1;
-    else
-        start_result =
-                sceKernelStartModule(load_result, 0, NULL, &status, NULL);
 
+    start_result = sceKernelStartModule(load_result, 0, NULL, &status, NULL);
     if (load_result != start_result)
         return -2;
 
     return 0;
 }
 
-void start_usb(void) {
-    load_start_module("flash0:/kd/semawm.prx");
-    load_start_module("flash0:/kd/usbstor.prx");
-    load_start_module("flash0:/kd/usbstormgr.prx");
-    load_start_module("flash0:/kd/usbstorms.prx");
-    load_start_module("flash0:/kd/usbstorboot.prx");
-    sceUsbStart(PSP_USBBUS_DRIVERNAME, 0, 0);
-    sceUsbStart(PSP_USBSTOR_DRIVERNAME, 0, 0);
-    sceUsbstorBootSetCapacity(0x800000);
-    sceUsbActivate(0x1c8);
+static int note_failure(int first_failed, int step, int result) {
+    if (first_failed == 0 && result < 0) {
+        return step;
+    }
+    return first_failed;
+}
+
+int start_usb(void) {
+    int failed = 0;
+
+    failed = note_failure(failed , 1 ,load_start_module("flash0:/kd/semawm.prx"));
+    failed = note_failure(failed , 2 ,load_start_module("flash0:/kd/usbstor.prx"));
+    failed = note_failure(failed , 3 ,load_start_module("flash0:/kd/usbstormgr.prx"));
+    failed = note_failure(failed , 4 ,load_start_module("flash0:/kd/usbstorms.prx"));
+    failed = note_failure(failed , 5 ,load_start_module("flash0:/kd/usbstorboot.prx"));
+    failed = note_failure(failed , 6 , sceUsbStart(PSP_USBBUS_DRIVERNAME, 0, 0));
+    failed = note_failure(failed , 7 ,sceUsbStart(PSP_USBSTOR_DRIVERNAME, 0, 0));
+    failed = note_failure(failed , 8 ,sceUsbstorBootSetCapacity(0x800000));
+    failed = note_failure(failed , 9 ,sceUsbActivate(0x1c8));
+
+    return failed;
 }
 
 void stop_usb(void) {
